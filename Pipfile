@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+numpy = "*"
+matplotlib = "*"
+jupyterlab = "*"
+grpcio = "*"
+grpcio-tools = "*"
+opencv-python = "3.4"
+tensorflow = "*"
+fire = "*"
+
+[requires]
+python_version = "3.8"
