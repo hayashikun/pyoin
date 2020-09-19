@@ -11,7 +11,7 @@ from proto.qoin.proto import hand_tracking_pb2, hand_tracking_pb2_grpc
 def run(name, host='localhost', port=50051):
     channel = grpc.insecure_channel(f'{host}:{port}')
     stub = hand_tracking_pb2_grpc.HandTrackingStub(channel)
-    response = stub.HandTrackingStream(hand_tracking_pb2.HandTrackingRequest())
+    response = stub.HandTrackingPullStream(hand_tracking_pb2.HandTrackingPullRequest())
     landmarks = list()
     try:
         for res in response:
