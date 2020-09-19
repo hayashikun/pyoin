@@ -3,12 +3,18 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+[pipenv]
+allow_prereleases = true
+
 [dev-packages]
+jupyterlab = "*"
+jupyterlab_code_formatter = "1.3.6"
+isort = "*"
+black = "*"
 
 [packages]
 numpy = "*"
 matplotlib = "*"
-jupyterlab = "*"
 grpcio = "*"
 grpcio-tools = "*"
 opencv-python = "3.4"
