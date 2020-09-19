@@ -13,13 +13,18 @@ def run(name, host='localhost', port=50051):
     stub = face_mesh_pb2_grpc.FaceMeshStub(channel)
     response = stub.FaceMeshPullStream(face_mesh_pb2.FaceMeshPullRequest())
     landmarks = list()
+    only_dump = name == ""
     try:
         for res in response:
             xyz = np.array([
                 [[lm.x, lm.y, lm.z] for lm in lml.landmark]
                 for lml in res.landmark_list])
             landmarks.append(xyz)
+            if only_dump:
+                print(xyz)
     except KeyboardInterrupt:
+        if only_dump:
+            return
         file = os.path.join(config.ProjectRoot, "data", f"{name}.npy")
         if not os.path.exists(dirname := os.path.dirname(file)):
             os.makedirs(dirname)

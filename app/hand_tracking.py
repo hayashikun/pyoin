@@ -12,12 +12,18 @@ def run(name, host='localhost', port=50051):
     channel = grpc.insecure_channel(f'{host}:{port}')
     stub = hand_tracking_pb2_grpc.HandTrackingStub(channel)
     response = stub.HandTrackingPullStream(hand_tracking_pb2.HandTrackingPullRequest())
+
     landmarks = list()
+    only_dump = name == ""
     try:
         for res in response:
             xyz = np.array([[lm.x, lm.y, lm.z] for lm in res.landmark_list.landmark])
             landmarks.append(xyz)
+            if only_dump:
+                print(xyz)
     except KeyboardInterrupt:
+        if only_dump:
+            return
         file = os.path.join(config.ProjectRoot, "data", f"{name}.npy")
         if not os.path.exists(dirname := os.path.dirname(file)):
             os.makedirs(dirname)
