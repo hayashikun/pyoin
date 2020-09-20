@@ -15,7 +15,7 @@ class HelloService(hello_pb2_grpc.GreeterServicer):
         return hello_pb2.HelloReply(message='Hello Again, %s!' % request.name)
 
     def HelloStream(self, request, context):
-        for _ in range(10):
+        while True:
             yield hello_pb2.HelloReply(message='Hello Stream, %s!' % request.name)
 
 
@@ -37,20 +37,24 @@ class FaceMeshService(face_mesh_pb2_grpc.FaceMeshServicer):
         return face_mesh_pb2.FaceMeshPushReply()
 
 
-def run(port=50051):
-    hello_service = HelloService()
-    hand_tracking_service = HandTrackingService()
-    face_mesh_service = FaceMeshService()
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=3))
+class PpServer:
+    def __init__(self, max_workers=3):
+        self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers))
 
-    hello_pb2_grpc.add_GreeterServicer_to_server(hello_service, server)
-    hand_tracking_pb2_grpc.add_HandTrackingServicer_to_server(hand_tracking_service, server)
-    face_mesh_pb2_grpc.add_FaceMeshServicer_to_server(face_mesh_service, server)
-    server.add_insecure_port(f'localhost:{port}')
-    server.start()
-    print(f"Server running http://localhost:{port}")
-    server.wait_for_termination()
+    def run(self, port=50051):
+        hello_service = HelloService()
+        hand_tracking_service = HandTrackingService()
+        face_mesh_service = FaceMeshService()
+
+        hello_pb2_grpc.add_GreeterServicer_to_server(hello_service, self.server)
+        hand_tracking_pb2_grpc.add_HandTrackingServicer_to_server(hand_tracking_service, self.server)
+        face_mesh_pb2_grpc.add_FaceMeshServicer_to_server(face_mesh_service, self.server)
+        self.server.add_insecure_port(f'localhost:{port}')
+        self.server.start()
+        print(f"Server running http://localhost:{port}")
+        self.server.wait_for_termination()
 
 
 if __name__ == "__main__":
-    run()
+    pps = PpServer()
+    pps.run()
