@@ -7,7 +7,7 @@ from app import pp_server
 from proto.qoin.proto import hello_pb2_grpc, hello_pb2
 
 
-class TestPpServer(unittest.TestCase):
+class TestHello(unittest.TestCase):
     port = 50051
     workers = 4
 
@@ -77,6 +77,3 @@ class TestPpServer(unittest.TestCase):
         self.workers = 1000
         self.setUp()
         self.test_hello_stream()
-
-    def test_face_mesh_pull_push(self):
-        self.assertTrue(True)
