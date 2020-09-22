@@ -5,16 +5,15 @@ from glob import glob
 from grpc_tools import protoc
 
 
-def gen(qoin_path, mediapipe_path=None):
+def gen(qoin_path):
     if os.path.exists('proto'):
         shutil.rmtree("proto")
     os.makedirs("proto")
 
     include_path = "/usr/local/include/"
     qoin_proto_files = glob(os.path.join(qoin_path, 'qoin', 'proto', '**', '*.proto'), recursive=True)
-    if mediapipe_path is None:
-        mediapipe_path = os.path.join(qoin_path, 'bazel-qoin', 'external', 'mediapipe')
-        mediapipe_path = os.path.abspath(mediapipe_path)
+    mediapipe_path = os.path.join(qoin_path, 'bazel-qoin', 'external', 'mediapipe')
+    mediapipe_path = os.path.abspath(mediapipe_path)
 
     mediapipe_proto_files = glob(os.path.join(mediapipe_path, 'mediapipe', 'framework', '**', '*.proto'),
                                  recursive=True)
