@@ -1,11 +1,11 @@
 import os
 import shutil
 from glob import glob
-
+import fire
 from grpc_tools import protoc
 
 
-def gen(qoin_path):
+def gen(qoin_path="../qoin"):
     if os.path.exists('proto'):
         shutil.rmtree("proto")
     os.makedirs("proto")
@@ -34,4 +34,4 @@ def gen(qoin_path):
 
 
 if __name__ == "__main__":
-    gen("../qoin", )
+    fire.Fire(gen)
